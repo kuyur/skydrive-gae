@@ -6,7 +6,7 @@ A Google AppEngine application to fetch direct links of resources storing on Mic
 Link format will be like:
 > http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/folder-name/file-name.mp3
 
-You can use non-alphabet charaters at [folder-name] and [file-name], and url-encoded tyle is also supported.
+You can use non-alphabet charaters at [folder-name] and [file-name], and url-encoded style is also supported.
 
 For example:
 
