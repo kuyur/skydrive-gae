@@ -3,6 +3,9 @@ skydrive-gae
 
 A Google AppEngine application to fetch direct links of resources storing on Microsoft Skydrive.
 
+Instruction
+--------------------
+
 Link format will be like:
 > http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/folder-name/file-name.mp3
 
