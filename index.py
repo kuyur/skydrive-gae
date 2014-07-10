@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import webapp2
-import urllib2, httplib
-import re
+import urllib2
+
+class NoRedirection(urllib2.HTTPErrorProcessor):
+    def http_response(self, request, response):
+        return response
+
+    https_response = http_response
 
 def getcid(link):
     pos = link.find('.office.live.com')
@@ -15,15 +20,17 @@ def to_new_type_link(link):
 
 def get_real_link(static_url):
     curl = "https://" + static_url
-    response = urllib2.urlopen(curl)
-    return response.geturl()
+    opener = urllib2.build_opener(NoRedirection)
+    res = opener.open(curl)
+    return res.headers.getheader('location')
 
 def get_dynamic_download_link(real_url, cid):
     pos = real_url.find(cid) + len(cid) + len('&id=')
     resid = real_url[pos:]
     real_url2 = 'https://skydrive.live.com/download.aspx?cid=' + cid.upper() + '&resid=' + resid + '&canary='
-    response = urllib2.urlopen(real_url2)
-    return response.geturl()
+    opener = urllib2.build_opener(NoRedirection)
+    res = opener.open(real_url2)
+    return res.headers.getheader('location')
 
 def replace_html_code(old_link):
     return old_link.replace('\\/','/')
