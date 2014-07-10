@@ -1,5 +1,5 @@
-﻿application: your-app-id
-version: 9
+﻿application: kuyurmusic2
+version: 10
 runtime: python27
 api_version: 1
 threadsafe: true
