@@ -1,4 +1,4 @@
 skydrive-gae
 ============
 
-Get direct link of resource on Skydrive
+Get direct link of resources on Skydrive.
