@@ -32,7 +32,7 @@ def to_new_type_link(link):
     pos = link.find('.office.live.com')
     cid = link[4:pos]
     uri = link[pos+len('.office.live.com'):]
-    return 'skydrive.live.com' + uri + '?cid=' + cid# + '&sc=documents'
+    return 'skydrive.live.com' + uri + '?cid=' + cid.lower()# + '&sc=documents'
 
 def get_real_link(static_url):
     curl = "https://" + static_url
