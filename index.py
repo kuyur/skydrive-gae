@@ -8,9 +8,25 @@ class NoRedirection(urllib2.HTTPErrorProcessor):
 
     https_response = http_response
 
-def getcid(link):
+def getcid_old_type(link):
     pos = link.find('.office.live.com')
     return link[4:pos]
+
+def getcid_cid_type(path):
+    pos = path.find('/', 4)
+    return path[4:pos]
+
+def getcid_resid_type(resid):
+    pos = resid.find('%21')
+    if pos == -1:
+        pos = resid.find('!')
+    if pos == -1:
+        return ''
+    return resid[0:pos]
+
+def get_file_path(path):
+    pos = path.find('/', 4)
+    return path[pos:]
 
 def to_new_type_link(link):
     pos = link.find('.office.live.com')
@@ -32,17 +48,42 @@ def get_dynamic_download_link(real_url, cid):
     res = opener.open(real_url2)
     return res.headers.getheader('location')
 
+def get_dynamic_download_link2(download_url):
+    opener = urllib2.build_opener(NoRedirection)
+    res = opener.open(download_url)
+    return res.headers.getheader('location')
+
 def replace_html_code(old_link):
     return old_link.replace('\\/','/')
 
-class MainPage(webapp2.RequestHandler):
+class OldLinkPage(webapp2.RequestHandler):
     def get(self):
         old_type_link = self.request.path[1:]
-        cid = getcid(old_type_link)
+        cid = getcid_old_type(old_type_link)
         new_type_link = to_new_type_link(old_type_link)
         real_link = get_real_link(new_type_link)
         self.redirect(replace_html_code(get_dynamic_download_link(real_link, cid)))
-        
+
+class CidPage(webapp2.RequestHandler):
+    def get(self):
+        path = self.request.path[1:]
+        cid = getcid_cid_type(path)
+        filepath = get_file_path(path)
+        new_type_link = 'skydrive.live.com/self.aspx' + filepath + '?cid=' + cid
+        real_link = get_real_link(new_type_link)
+        self.redirect(replace_html_code(get_dynamic_download_link(real_link, cid)))
+
+class ResidPage(webapp2.RequestHandler):
+    def get(self):
+        path = self.request.path[1:]
+        resid = path[6:]
+        cid = getcid_resid_type(resid)
+        if cid == '':
+            self.redirect('/index.html')
+        else:
+            download_link = 'https://skydrive.live.com/download.aspx?cid=' + cid.upper() + '&resid=' + resid.upper().replace('!', '%21') + '&canary='
+            self.redirect(replace_html_code(get_dynamic_download_link2(download_link)))
+
 class IndexPage(webapp2.RequestHandler):
     def get(self):
         self.response.out.write('''<html>
@@ -89,9 +130,10 @@ Modified by <a href="http://kuyur.info/blog" target="_blank"><img src="http://ku
      
 app = webapp2.WSGIApplication(
                                      [('/', IndexPage),
-                                     ('/index.html', IndexPage),
-                                     ('/index.htm', IndexPage),
-                                     ('/cid.*', MainPage),
-                                     #(r'/http\*',MainPage),
+                                     ('/index\.html', IndexPage),
+                                     ('/index\.htm', IndexPage),
+                                     ('/cid-\w*\.office\.live\.com/.*', OldLinkPage),
+                                     ('/cid/.*', CidPage),
+                                     ('/resid/.*', ResidPage)
                                      ],
                                      debug=True)
