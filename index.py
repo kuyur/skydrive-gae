@@ -124,6 +124,7 @@ remember remove the skydrive "http://"<br>
 Thanks to <img src="http://msl.appspot.com/static/images/gmail.png"><br>
 <br>
 Modified by <a href="http://kuyur.info/blog" target="_blank"><img src="http://kuyur.info/blog/uploads/2010/03/mail.png"></a><br>
+Checkout source code: <a href="https://github.com/kuyur/skydrive-gae" target="_blank">https://github.com/kuyur/skydrive-gae</a><br>
 </body>
 </html>''')
      
