@@ -10,7 +10,6 @@ Link format will be like:
 > http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/folder-name/file-name.mp3
 
 You can use non-alphabet charaters at [folder-name] and [file-name], and url-encoded style is also supported.
-Notice that cid should be in lower case.
 
 For example:
 
@@ -53,8 +52,6 @@ skydrive-gae支持3种形式的链接。
 > http://your-app-id.appspot.com/resid/xxxxxxxxxxxxxxxx%21xxx
 
 形式3只需resid，resid可以在skydrive上取得。
-
-注意：形式1和形式2中的cid应该用小写字母填写，形式3中的resid应该用大写字母填写。
 
 形式1和形式2的后半部分，是直观上的文件路径：
 > .Public/folder-name/file-name.mp3
