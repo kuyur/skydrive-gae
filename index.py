@@ -28,11 +28,10 @@ def get_file_path(path):
     pos = path.find('/', 4)
     return path[pos:]
 
-def to_new_type_link(link):
+def to_new_type_link(link, cid):
     pos = link.find('.office.live.com')
-    cid = link[4:pos]
     uri = link[pos+len('.office.live.com'):]
-    return 'skydrive.live.com' + uri + '?cid=' + cid.lower()# + '&sc=documents'
+    return 'skydrive.live.com' + uri + '?cid=' + cid# + '&sc=documents'
 
 def get_real_link(static_url):
     curl = "https://" + static_url
@@ -59,15 +58,15 @@ def replace_html_code(old_link):
 class OldLinkPage(webapp2.RequestHandler):
     def get(self):
         old_type_link = self.request.path[1:]
-        cid = getcid_old_type(old_type_link)
-        new_type_link = to_new_type_link(old_type_link)
+        cid = getcid_old_type(old_type_link).lower()
+        new_type_link = to_new_type_link(old_type_link, cid)
         real_link = get_real_link(new_type_link)
         self.redirect(replace_html_code(get_dynamic_download_link(real_link, cid)))
 
 class CidPage(webapp2.RequestHandler):
     def get(self):
         path = self.request.path[1:]
-        cid = getcid_cid_type(path)
+        cid = getcid_cid_type(path).lower()
         filepath = get_file_path(path)
         new_type_link = 'skydrive.live.com/self.aspx' + filepath + '?cid=' + cid
         real_link = get_real_link(new_type_link)
