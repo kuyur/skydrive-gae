@@ -67,13 +67,13 @@ skydrive-gae支持3种形式的链接。
 
 有童鞋可能希望使用自己的域名和更简短的链接形式，如果你使用apache服务器，可以参考下面的.htaccess文件。
 
-Here is a sample of .htaccess for apache. Put it at any folder, let's call the folder `hikari` for demo.
+将这个.htaccess文件放在apache的网页目录中的任意一个文件夹，假设这个文件夹叫hikari
 
     RewriteEngine On
     RewriteBase /
     RewriteRule ^(.*)$ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/$1
 
-Now you can use your domain name and simple url link such as:
+那么你将可以使用类似下面的短链接：
 
 > http://your.domain.com/hikari/中文/文件.rar
 > 
