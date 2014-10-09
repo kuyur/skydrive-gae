@@ -92,7 +92,10 @@ skydrive-gae支持3种形式的链接。
 > 
 > http://your-app-id.appspot.com/cid/xxxxxxxxxxxxxxxx/.Public/%E4%B8%AD%E6%96%87/%E6%96%87%E4%BB%B6.rar
 
-有童鞋可能希望使用自己的域名和更简短的链接形式，如果你使用apache服务器，可以参考下面的.htaccess文件。
+有童鞋可能希望使用自己的域名和更简短的链接形式，如果你使用apache服务器，有两种可行方式：.htaccess(URL重写) 或者 启用proxy_http模块的反向代理。
+
+#### .htaccess(URL重写)
+可以参考下面的.htaccess文件。
 
 将这个.htaccess文件放在apache的网页目录中的任意一个文件夹，假设这个文件夹叫hikari
 
@@ -101,6 +104,29 @@ skydrive-gae支持3种形式的链接。
     RewriteRule ^(.*)$ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/$1
 
 那么你将可以使用类似下面的短链接：
+
+> http://your.domain.com/hikari/中文/文件.rar
+> 
+> http://your.domain.com/hikari/%E4%B8%AD%E6%96%87/%E6%96%87%E4%BB%B6.rar
+
+#### proxy_http(反向代理)
+反向代理是一种访问控制机制，浏览器并不直接访问目标URL，而是由apache或者nginx服务器先取得目标URL的response，并将response返回给浏览器。通过反向代理，我们能够突破GFW对GAE的封锁，只要你的服务器能够访问GAE。（URL重写不能突破GFW）
+
+如果你在使用ubuntu的最新版本，启用`proxy_http`非常简单：`sudo a2enmod proxy_http`
+
+打开 `/etc/apache2/sites-available/default.conf`,按如下添加`ProxyRequests`, `ProxyPass` 和 `ProxyPassReverse`三行：
+
+    <VirtualHost *:80>
+        ...
+        DocumentRoot /var/www
+        ServerName your.domain.com
+        ProxyRequests Off
+        ProxyPass /hikari/ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/
+        ProxyPassReverse /hikari/ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/
+        ...
+    </VirtualHost>
+
+重启apache服务器，就可以使用类似下面的短链接：
 
 > http://your.domain.com/hikari/中文/文件.rar
 > 
