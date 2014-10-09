@@ -19,13 +19,40 @@ For example:
 
 You maybe wish to used your domain name and simple url links.
 
-Here is a sample of .htaccess for apache. Put it at any folder, let's call the folder `hikari` for demo.
+There are two methods to do this: by .htaccess(URL Rewriting) or by proxy_http module (Reverse Proxy).
+
+#### .htaccess(URL Rewriting)
+Here is a sample of .htaccess for apache. Put it at any folder, let's call the folder `hikari` for example.
 
     RewriteEngine On
     RewriteBase /
     RewriteRule ^(.*)$ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/$1
 
 Now you can use your domain name and simple url link such as:
+
+> http://your.domain.com/hikari/中文/文件.rar
+> 
+> http://your.domain.com/hikari/%E4%B8%AD%E6%96%87/%E6%96%87%E4%BB%B6.rar
+
+#### proxy_http(Reverse Proxy)
+Reverse Proxy will enable your apache server to fetch content of any url (including cross-domain urls), and then return the response to browser. It is a way to fool GFW. 
+
+If you are using latest ubuntu, enable `proxy_http` by command:
+`sudo a2enmod proxy_http`
+
+Then open `/etc/apache2/sites-available/default.conf`, and add line of `ProxyRequests`, `ProxyPass` and `ProxyPassReverse`:
+
+    <VirtualHost *:80>
+        ...
+        DocumentRoot /var/www
+        ServerName your.domain.com
+        ProxyRequests Off
+        ProxyPass /hikari/ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/
+        ProxyPassReverse /hikari/ http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/
+        ...
+    </VirtualHost>
+
+Restart apache, simple url links also are avaiable:
 
 > http://your.domain.com/hikari/中文/文件.rar
 > 
