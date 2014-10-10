@@ -17,7 +17,7 @@ For example:
 > 
 > http://your-app-id.appspot.com/cid-xxxxxxxxxxxxxxxx.office.live.com/self.aspx/.Public/%E4%B8%AD%E6%96%87/%E6%96%87%E4%BB%B6.rar
 
-You maybe wish to used your domain name and simple url links.
+You maybe wish to use your domain name and simple url links.
 
 There are two methods to do this: by .htaccess(URL Rewriting) or by proxy_http module (Reverse Proxy).
 
